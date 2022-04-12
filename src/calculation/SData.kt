@@ -1,4 +1,3 @@
 package calculation
 
-class SData {
-}
+data class SData(val value: Double, val isIncreased: Boolean)

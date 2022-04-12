@@ -10,7 +10,7 @@ class BinaryTreeNode (private val parent: BinaryTreeNode?, val nodeValue: Double
             return increase!!
         }else{
             reduction = BinaryTreeNode(this, inputValue)
-            return  reduction!!
+            return reduction!!
         }
     }
 }
