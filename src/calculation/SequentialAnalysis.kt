@@ -5,7 +5,7 @@ import calculation.utils.comb
 import kotlin.math.max
 import kotlin.math.pow
 
-class SequentialAnalysis(private val args: InitArgs) {
+class SequentialAnalysis(val args: InitArgs) {
     val S = HashMap<Int, SData>()
 
     val P: Double

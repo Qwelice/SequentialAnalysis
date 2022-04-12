@@ -2,9 +2,11 @@ import calculation.SequentialAnalysis
 import calculation.args.InitArgs
 import gui.frames.EnterFrame
 import gui.frames.SaFrame
+import gui.managers.MainManager
 
 fun main(){
-     SaFrame(500, 250).isVisible = true
+     val manager = MainManager()
+//     SaFrame(500, 250).isVisible = true
 //    val args = InitArgs(2,-0.3,0.4,0.1,110.0,100.0,10.0)
 //    val s = SequentialAnalysis(args)
 //    s.addS(1, true)
