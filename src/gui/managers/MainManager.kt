@@ -1,10 +1,12 @@
 package gui.managers
 
 import gui.managers.listeners.*
+import java.util.*
 
 class MainManager {
     private val enterManager = EnterFrameManager()
     private val saManager = SaFrameManager()
+    private val historyManager = HistoryFrameManager()
 
     init {
         handleEvents()
@@ -27,6 +29,7 @@ class MainManager {
         saManager.addListener(object : SaHideListener{
             override fun hide() {
                 enterManager.setFrameVisible(true)
+                historyManager.clearHistory()
             }
         })
 
@@ -39,19 +42,37 @@ class MainManager {
 
         saManager.addListener(object : IncreaseListener{
             override fun increase() {
-
             }
         })
 
         saManager.addListener(object : ReduceListener{
             override fun reduce() {
-
             }
         })
 
         saManager.addListener(object : HistoryListener{
             override fun openHistory() {
+                historyManager.setFrameVisible(true)
+            }
+        })
 
+        historyManager.addListener(object : HistoryHideListener{
+            override fun hide() {
+
+            }
+        })
+
+        saManager.addListener(object : UpdateHistoryListener{
+            override fun appendData(data: Vector<String>) {
+                historyManager.appendData(data)
+            }
+        })
+
+        saManager.addListener(object : InitAnalysisListener{
+            override fun init(data: Vector<String>) {
+                if(data.isNotEmpty()){
+                    historyManager.appendData(data)
+                }
             }
         })
     }

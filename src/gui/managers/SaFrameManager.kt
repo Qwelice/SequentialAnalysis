@@ -6,6 +6,8 @@ import gui.frames.SaFrame
 import gui.managers.listeners.*
 import java.awt.event.ComponentAdapter
 import java.awt.event.ComponentEvent
+import java.util.*
+import kotlin.collections.ArrayList
 
 class SaFrameManager {
     private val frame = SaFrame(300, 250)
@@ -19,6 +21,7 @@ class SaFrameManager {
     fun initSequentialAnalysis(args: InitArgs){
         sa = SequentialAnalysis(args)
         updateFrameView()
+        updateEvent()
     }
 
     private fun updateFrameView(){
@@ -53,6 +56,35 @@ class SaFrameManager {
             }
             frame.repaint()
         }
+    }
+
+    private fun getData() : Vector<String>{
+        val data = Vector<String>()
+        if(sa != null){
+            val n = sa!!.S.keys.count() - 1
+            if(n >= sa!!.args.N){
+                data.addAll(listOf(
+                    sa!!.args.N.toString(),
+                    n.toString(),
+                    (sa!!.S[n]!!.value).toString(),
+                    (sa!!.getB(n)).toString(),
+                    "???",
+                    "???",
+                    sa!!.Cn.toString()
+                ))
+            }else{
+                data.addAll(listOf(
+                    sa!!.args.N.toString(),
+                    n.toString(),
+                    (sa!!.S[n]!!.value).toString(),
+                    (sa!!.getB(n)).toString(),
+                    sa!!.gammaN(n + 1).toString(),
+                    sa!!.betaN(n + 1).toString(),
+                    sa!!.Cn.toString()
+                ))
+            }
+        }
+        return data
     }
 
     fun setFrameVisible(isVisible: Boolean){
@@ -98,6 +130,7 @@ class SaFrameManager {
             val n = sa!!.S.keys.count() - 1
             sa!!.addS(n + 1, true)
             updateFrameView()
+            updateEvent()
         }
     }
 
@@ -111,6 +144,7 @@ class SaFrameManager {
             val n = sa!!.S.keys.count() - 1
             sa!!.addS(n + 1, false)
             updateFrameView()
+            updateEvent()
         }
     }
 
@@ -134,6 +168,22 @@ class SaFrameManager {
         listeners.forEach { l ->
             if (l is SaHideListener){
                 l.hide()
+            }
+        }
+    }
+
+    private fun initEvent(){
+        listeners.forEach { l ->
+            if(l is InitAnalysisListener){
+                l.init(getData())
+            }
+        }
+    }
+
+    private fun updateEvent(){
+        listeners.forEach { l ->
+            if(l is UpdateHistoryListener){
+                l.appendData(getData())
             }
         }
     }
